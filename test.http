@@ -1,0 +1,7 @@
+POST http://localhost:8089/app/users
+Content-Type: application/json 
+
+{
+    "userName" : "Franseen",
+    "dateOfBirth" : "10-10-1991"
+}

@@ -1,28 +1,46 @@
-import { Grid, Stack } from "@mui/material";
+import { Alert, Grid } from "@mui/material";
 import "./App.css";
 import HeaderComponent from "./components/header";
 import MainCard from "./components/MainCard";
 // import LinearIndeterminate from "./components/Loaders";
-import TableComponent from "./components/TableComponent";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ButtonComponent from "./components/Button";
 import AddEditPersonModal from "./screens/person/AddEditPersonModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import FormPersonal from "./screens/person/FormPersonal";
 
 function App() {
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    setShow(false);
+    setMessage(false);
+  }, []);
 
-  const handleCreateEdit = () => {
-    setOpen(true);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+    setShow(false);
+    // setMessage(false);
   };
 
-  const handleCloseCreateEdit = () => {
-    setOpen(false);
+  const handleShows = () => {
+    setShow(true);
+    setMessage(false);
+  };
+
+  const handleHide = () => {
+    setShow(false);
+    setMessage(false);
   };
 
   return (
-    <div className="App" style={{ backgroundColor: "#E7EFFF" }}>
-      <HeaderComponent />
+    <div className="App" style={{ backgroundColor: "#1d3354" }}>
+      <HeaderComponent
+        show={show}
+        setShow={setShow}
+        handleShows={handleShows}
+        handleHide={handleHide}
+      />
 
       <MainCard
         sx={{
@@ -30,37 +48,46 @@ function App() {
           marginTop: "15px",
           marginBottom: 5,
           border: "1px solid white",
+          backgroundColor: "#1d3354",
         }}
       >
-        <Stack direction="row" justifyContent="end">
-          <div>
-            <ButtonComponent
-              handleClick={handleCreateEdit}
-              variant="contained"
-              size="small"
-              color="info"
-              startIcon={<AddCircleIcon />}
-              style={{ paddingTop: "6px", paddingBottom: "6px" }}
-              text={"AJOUTER USER"}
-            />
-          </div>
-        </Stack>
-      </MainCard>
-
-      <MainCard
-        sx={{
-          border: "1px solid white",
-          marginTop: "4px",
-          marginBottom: "4px",
-        }}
-      >
-        <Grid container spacing={1} style={{ marginTop: 10, marginBottom: 15 }}>
+        <Grid
+          container
+          spacing={1}
+          style={{
+            marginTop: 10,
+            marginBottom: 15,
+            backgroundColor: "#1d3354",
+          }}
+        >
           {/* <LinearIndeterminate /> */}
-          <TableComponent />
+          {/* <TableComponent /> */}
+          <Grid md="12" xs="12">
+            {message ? (
+              <Alert severity="success">
+                Personnel Enregistrer avec success!
+              </Alert>
+            ) : (
+              ""
+            )}
+          </Grid>
         </Grid>
+        {show ? (
+          <FormPersonal
+            open={open}
+            setMessage={setMessage}
+            handleClose={handleClose}
+          />
+        ) : (
+          ""
+        )}
       </MainCard>
 
-      <AddEditPersonModal open={open} handleClose={handleCloseCreateEdit} />
+      <AddEditPersonModal
+        open={open}
+        setMessage={setMessage}
+        handleClose={handleClose}
+      />
     </div>
   );
 }

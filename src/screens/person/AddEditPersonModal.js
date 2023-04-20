@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,14 +8,15 @@ import ButtonComponent from "../../components/Button";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SaveIcon from "@mui/icons-material/Save";
 import { Slide } from "@mui/material";
+import axios from "axios";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const AddEditPersonModal = ({ open, handleClose }) => {
-  const [users, setUsers] = React.useState({
-    name: "",
+const AddEditPersonModal = ({ open, setMessage, handleClose }) => {
+  const [users, setUsers] = useState({
+    userName: "",
     dateOfBirth: null,
   });
 
@@ -26,6 +27,30 @@ const AddEditPersonModal = ({ open, handleClose }) => {
     value = e.target.value;
     setUsers({ ...users, [name]: value });
   };
+
+  const handleSave = () => {
+    const registered = {
+      userName: users.userName,
+      dateOfBirth: users.dateOfBirth,
+    };
+
+    axios
+      .post("http://localhost:8089/app/users", registered)
+      .then((response) => {
+        console.log("=======<>", response.data);
+        setMessage(true);
+        setUsers({
+          userName: "",
+          dateOfBirth: "",
+        });
+        handleClose();
+      })
+      .catch((error) => {
+        setMessage(false);
+        console.log("====<>", error);
+      });
+  };
+
   return (
     <div>
       <Dialog
@@ -40,9 +65,12 @@ const AddEditPersonModal = ({ open, handleClose }) => {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="userName"
             label="Name"
-            type="email"
+            name="userName"
+            value={users.userName}
+            onChange={handleInputs}
+            type="text"
             fullWidth
             variant="standard"
           />
@@ -51,8 +79,11 @@ const AddEditPersonModal = ({ open, handleClose }) => {
             autoFocus
             margin="dense"
             id="dateOfBirth"
+            name="dateOfBirth"
             label="Date of birthday"
             type="date"
+            value={users.dateOfBirth}
+            onChange={handleInputs}
             fullWidth
             variant="standard"
           />
@@ -69,7 +100,7 @@ const AddEditPersonModal = ({ open, handleClose }) => {
           />
 
           <ButtonComponent
-            handleClick={handleClose}
+            handleClick={handleSave}
             variant="contained"
             size="small"
             color="info"
