@@ -18,6 +18,8 @@ router.post("/users", (request, response) => {
     });
 });
 
-// router.get('/users', )
+// router.get('/users', (request, response)=>{
+
+// })
 
 module.exports = router;
