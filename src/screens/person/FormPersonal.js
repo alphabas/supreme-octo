@@ -8,13 +8,17 @@ import SaveIcon from "@mui/icons-material/Save";
 import axios from "axios";
 import { Alert, Typography } from "@mui/material";
 
-const FormPersonal = ({ open, setMessage, handleClose }) => {
+const FormPersonal = ({
+  open,
+  users,
+  setUsers,
+  getUsers,
+  setLoading,
+  setMessage,
+  handleClose,
+}) => {
   const [ErrorUsername, setErrorUsername] = useState(false);
   const [ErrorDate, setErrorDate] = useState(false);
-  const [users, setUsers] = useState({
-    userName: "",
-    dateOfBirth: null,
-  });
 
   let name, value;
 
@@ -25,6 +29,7 @@ const FormPersonal = ({ open, setMessage, handleClose }) => {
   };
 
   const handleSave = () => {
+    setLoading(true);
     if (users.userName === "") {
       setErrorUsername(true);
     }
@@ -48,11 +53,14 @@ const FormPersonal = ({ open, setMessage, handleClose }) => {
             userName: "",
             dateOfBirth: "",
           });
+          getUsers();
           handleClose();
+          setLoading(false);
         })
         .catch((error) => {
           setMessage(false);
           console.log("====<>", error);
+          setLoading(false);
         });
     } else {
       return;

@@ -18,8 +18,15 @@ router.post("/users", (request, response) => {
     });
 });
 
-// router.get('/users', (request, response)=>{
-
-// })
+router.get("/users", async (request, response) => {
+  userTemplate
+    .find()
+    .then((data) => {
+      response.json(data);
+    })
+    .catch((err) => {
+      response.json(err);
+    });
+});
 
 module.exports = router;
