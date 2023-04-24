@@ -12,6 +12,7 @@ import LinearDeterminate from "./components/LinearDeterminate";
 
 function App() {
   useEffect(() => {
+    setStartPage(true);
     setShow(false);
     setMessage(false);
     getUsers();
@@ -28,6 +29,7 @@ function App() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [startPage, setStartPage] = useState(false);
 
   const handleEdit = (data) => {
     console.log("=====<>", data);
@@ -38,7 +40,6 @@ function App() {
   const handleClose = () => {
     setOpen(false);
     setShow(false);
-    // setMessage(false);
   };
 
   const getUsers = () => {
@@ -46,10 +47,12 @@ function App() {
       .get("http://localhost:8089/app/users")
       .then((data) => {
         setData(data.data);
+        setStartPage(false);
         console.log("DATA=====<>", data);
       })
       .catch((err) => {
         console.log("ERR", err);
+        setStartPage(false);
       });
   };
 
@@ -112,7 +115,11 @@ function App() {
             handleClose={handleClose}
           />
         ) : (
-          <TableComponent rows={data} handleEdit={handleEdit} />
+          <TableComponent
+            startPage={startPage}
+            rows={data}
+            handleEdit={handleEdit}
+          />
         )}
       </MainCard>
     </div>

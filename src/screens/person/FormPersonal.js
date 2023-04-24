@@ -119,7 +119,7 @@ const FormPersonal = ({
           color="info"
           startIcon={<SaveIcon />}
           style={{ paddingTop: "6px", paddingBottom: "6px" }}
-          text={"SAVE"}
+          text={users.id ? "EDIT" : "SAVE"}
         />
       </DialogActions>
     </div>
