@@ -18,6 +18,7 @@ function App() {
   }, []);
 
   const [users, setUsers] = useState({
+    id: "",
     userName: "",
     dateOfBirth: null,
   });
@@ -30,7 +31,8 @@ function App() {
 
   const handleEdit = (data) => {
     console.log("=====<>", data);
-    setUsers({ userName: data.userName });
+    setShow(true);
+    setUsers({ id: data._id, userName: data.userName });
   };
 
   const handleClose = () => {
