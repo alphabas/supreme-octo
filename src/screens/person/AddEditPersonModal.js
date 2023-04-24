@@ -16,6 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const AddEditPersonModal = ({ open, setMessage, handleClose }) => {
   const [users, setUsers] = useState({
+    id: "",
     userName: "",
     dateOfBirth: null,
   });
@@ -34,21 +35,39 @@ const AddEditPersonModal = ({ open, setMessage, handleClose }) => {
       dateOfBirth: users.dateOfBirth,
     };
 
-    axios
-      .post("http://localhost:8089/app/users", registered)
-      .then((response) => {
-        console.log("=======<>", response.data);
-        setMessage(true);
-        setUsers({
-          userName: "",
-          dateOfBirth: "",
+    if (users.id) {
+      axios
+        .put("http://localhost:8089/app/users", { ...users.id, registered })
+        .then((response) => {
+          console.log("=======<>", response.data);
+          setMessage(true);
+          setUsers({
+            userName: "",
+            dateOfBirth: "",
+          });
+          handleClose();
+        })
+        .catch((error) => {
+          setMessage(false);
+          console.log("====<>", error);
         });
-        handleClose();
-      })
-      .catch((error) => {
-        setMessage(false);
-        console.log("====<>", error);
-      });
+    } else {
+      axios
+        .post("http://localhost:8089/app/users", registered)
+        .then((response) => {
+          console.log("=======<>", response.data);
+          setMessage(true);
+          setUsers({
+            userName: "",
+            dateOfBirth: "",
+          });
+          handleClose();
+        })
+        .catch((error) => {
+          setMessage(false);
+          console.log("====<>", error);
+        });
+    }
   };
 
   return (
